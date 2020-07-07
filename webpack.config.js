@@ -30,5 +30,8 @@ module.exports = {
   devServer: {
     contentBase: "./dist",
   },
+  externals: {
+    react: "react",
+  },
   plugins: [new UnusedFilesWebpackPlugin({ patterns: ["src/**/*.js"] })],
 };
