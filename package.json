@@ -1,7 +1,7 @@
 {
-  "name": "fast-react-particles",
+  "name": "slim-react-particles",
   "version": "1.0.0",
-  "description": "A fast and basic version of particlesjs",
+  "description": "A fast and slim version of particlesjs",
   "main": "dist/index.js",
   "files": [
     "dist/*.js",
