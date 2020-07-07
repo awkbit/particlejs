@@ -1,9 +1,8 @@
 {
   "name": "fast-react-particles",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "A fast and basic version of particlesjs",
   "main": "dist/index.js",
-  "module": "src/index.js",
   "files": [
     "dist/*.js",
     "src"
