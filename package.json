@@ -1,5 +1,5 @@
 {
-  "name": "@awkbit/fast-react-particles",
+  "name": "fast-react-particles",
   "version": "1.0.0",
   "description": "A fast and basic version of particlesjs",
   "main": "dist/index.js",
@@ -9,12 +9,12 @@
     "src"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "clear": "rimraf -f ./dist",
     "start": "webpack --watch --mode development",
     "build": "yarn clear && webpack --mode production && yarn bundlesize",
     "bundlesize": "gzip -c dist/index.js | wc -c",
-    "publish": "yarn build && np"
+    "pub": "yarn build && np --no-tests"
   },
   "keywords": [
     "particlesjs",
@@ -44,5 +44,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
