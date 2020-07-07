@@ -1,4 +1,4 @@
-import { Circle, CircleWarp, ColorUtils, Constants, Utils } from "@utils";
+import { Circle, ColorUtils, Constants, Utils } from "@utils";
 export class Linker {
   constructor(container) {
     this.container = container;
@@ -12,7 +12,6 @@ export class Linker {
     const linkOpt1 = p1.particlesOptions.links;
     const optOpacity = linkOpt1.opacity;
     const optDistance = p1.linksDistance ?? container.retina.linksDistance;
-    const canvasSize = container.canvas.size;
     const pos1 = p1.getPosition();
     const range = new Circle(pos1.x, pos1.y, optDistance);
     const query = container.particles.quadTree.query(range);

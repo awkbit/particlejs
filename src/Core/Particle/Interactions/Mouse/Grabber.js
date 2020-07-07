@@ -38,8 +38,8 @@ export class Grabber {
       const optColor = ColorUtils.colorToRgb(
         container.options.particles.links.color
       );
+      context.lineWidth = container.retina.linksWidth;
 
-      context.beginPath();
       for (const particle of query) {
         const pos = particle.getPosition();
         const distance = Utils.getDistance(pos, mousePos);
@@ -48,14 +48,18 @@ export class Grabber {
             lineOpacity - (distance * lineOpacity) / grabDistance;
 
           if (opacityLine > 0) {
+            context.beginPath();
             container.canvas.drawGrabLine(particle, mousePos);
+            context.closePath();
+            context.strokeStyle = ColorUtils.getStyleFromRgb(
+              optColor,
+              opacityLine.toFixed(2)
+            );
+
+            context.stroke();
           }
         }
       }
-      context.closePath();
-      context.strokeStyle = ColorUtils.getStyleFromRgb(optColor, lineOpacity);
-      context.lineWidth = container.retina.linksWidth;
-      context.stroke();
     }
   }
 }

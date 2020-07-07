@@ -85,8 +85,9 @@ export class Container {
     const optParticlesNumber = numberOptions.value;
     const optParticlesLimit =
       numberOptions.limit > 0 ? numberOptions.limit : optParticlesNumber;
-    const particlesNumber =
-      Math.min(optParticlesNumber, optParticlesLimit) * this.density;
+    const particlesNumber = Math.floor(
+      Math.min(optParticlesNumber, optParticlesLimit) * this.density
+    );
     const particlesCount = this.particles.count;
     if (particlesCount < particlesNumber) {
       this.particles.push(Math.abs(particlesNumber - particlesCount));

@@ -22,6 +22,19 @@ export default class LinkedList {
 
     this.size += 1;
   }
+  removeFirstOf(data) {
+    let curr = this.head;
+    let prev = null;
+    while (curr.data !== data && curr.next) {
+      prev = curr;
+      curr = curr.next;
+    }
+    if (curr.data === data) {
+      prev.next = curr.next;
+      this.size -= 1;
+      return curr.data;
+    }
+  }
   shift(data) {
     if (this.size === 0) {
       this.head = this.tail = createNode(data);
@@ -120,5 +133,3 @@ function getNodeAt(startNode, index) {
 
   return i === index ? current : undefined;
 }
-
-function getTail(node) {}

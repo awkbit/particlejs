@@ -28,7 +28,7 @@ export default class Particles extends React.PureComponent {
     return container;
   };
 
-  refresh(props) {
+  refresh() {
     if (this.canvas) {
       this.destroy();
       this.start();

@@ -1,19 +1,20 @@
 import { Particle } from "./Particle";
 import { QuadTree, Rectangle, ColorUtils } from "@utils";
+import LinkedList from "@utils/LinkedList";
 import { InteractionManager } from "./Particle/InteractionManager";
 
 // TODO use linked list for particles
 export class Particles {
   constructor(container) {
     this.container = container;
-    this.array = [];
+    this.pList = new LinkedList();
     this.interactionManager = new InteractionManager(container);
 
     this.linksColors = {};
     this.quadTree = null;
   }
   get count() {
-    return this.array.length;
+    return this.pList.size;
   }
   init() {
     const { color, opacity, number } = this.container.options.particles;
@@ -41,21 +42,21 @@ export class Particles {
   }
   removeAt(index, quantity) {
     if (index >= 0 && index <= this.count) {
-      for (const particle of this.array.splice(
+      const removed = this.pList.slice(
         index,
         quantity !== null && quantity !== void 0 ? quantity : 1
-      )) {
+      );
+      for (const particle of removed) {
         particle.destroy();
       }
     }
   }
   remove(particle) {
-    this.removeAt(this.array.indexOf(particle));
+    this.pList.removeFirstOf(particle);
   }
   update(delta) {
     const container = this.container;
-    const particlesToDelete = [];
-    for (const particle of this.array) {
+    for (const particle of this.pList) {
       particle.bubble.inRange = false;
       for (const [, plugin] of container.plugins) {
         if (particle.destroyed) {
@@ -68,13 +69,11 @@ export class Particles {
       if (!particle.destroyed) {
         particle.update(delta);
       } else {
-        particlesToDelete.push(particle);
+        // TODO: check if it's worth deleting while iterating
+        this.remove(particle);
         continue;
       }
       this.quadTree.insert(particle);
-    }
-    for (const particle of particlesToDelete) {
-      this.remove(particle);
     }
     this.interactionManager.interact(delta);
   }
@@ -82,12 +81,16 @@ export class Particles {
     const container = this.container;
     container.canvas.clear();
 
-    this.quadTree.reset();
+    const canvasSize = this.container.canvas.size;
+    this.quadTree = new QuadTree(
+      new Rectangle(0, 0, canvasSize.width, canvasSize.height),
+      4
+    );
     this.update(delta);
 
     const { context } = container.canvas;
     context.fillStyle = this.particlesFillStyle;
-    for (const p of this.array) {
+    for (const p of this.pList) {
       context.beginPath();
       p.draw(delta);
 
@@ -95,12 +98,14 @@ export class Particles {
     }
   }
   clear() {
-    this.array.length = 0;
+    this.pList = new LinkedList();
   }
   push(nb, mousePosition) {
     const container = this.container;
     const options = container.options;
-    const limit = options.particles.number.limit * container.density;
+    const limit = Math.round(
+      options.particles.number.limit * container.density
+    );
     this.pushing = true;
     if (limit > 0) {
       const countToRemove = this.count + nb - limit;
@@ -122,7 +127,7 @@ export class Particles {
     // TODO: use Linked List and create a Pool of removed Particles
     // Check if Pool has a Particle available and unshift one from the Pool
     const particle = new Particle(this.container, position);
-    this.array.push(particle);
+    this.pList.push(particle);
     return particle;
   }
   removeQuantity(quantity) {
